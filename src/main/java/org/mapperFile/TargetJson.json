@@ -1,0 +1,5 @@
+{
+  "studentId": "$.student.rollNo",
+  "studentAge": "$.student.age",
+  "studentName": "$.student.name"
+}
