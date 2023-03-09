@@ -1,7 +1,12 @@
 {
   "student": {
     "rollNo": "12345",
-    "name": "Abc",
-    "age": "30"
+    "name": "Student name",
+    "age": "Student age"
+  },
+  "staff": {
+    "rollNo": "67891",
+    "name": "Staff name",
+    "age": "Staff age"
   }
 }
