@@ -1,12 +1,26 @@
 {
-  "student": {
-    "rollNo": "12345",
-    "name": "Student name",
-    "age": "Student age"
-  },
-  "staff": {
-    "rollNo": "67891",
-    "name": "Staff name",
-    "age": "Staff age"
+  "interests": {
+    "hobbies": [
+      {
+        "hobbiesName1": "Reading",
+        "hobbiesLevel1": "Advanced"
+      },
+      {
+        "hobbiesName2": "Hiking",
+        "hobbiesLevel2": "Intermediate"
+      }
+    ],
+    "sports": [
+      {
+        "sportsName1": "Basketball",
+        "sportsLevel1": "Advanced",
+        "years_played1": "10"
+      },
+      {
+        "sportsName2": "Tennis",
+        "sportsLevel2": "Beginner",
+        "years_played2": "2"
+      }
+    ]
   }
 }

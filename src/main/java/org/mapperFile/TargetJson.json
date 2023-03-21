@@ -1,6 +1,26 @@
 {
-  "studentId": "$.student.rollNo",
-  "studentName": "$.student.name",
-  "staffId": "$.staff.rollNo",
-  "staffName": "$.staff.name"
+  "personInterests": {
+    "personHobbies": [
+      {
+        "hobbyName1": "$interests.hobbies.hobbiesName1",
+        "hobbyLevel1": "$interests.hobbies.hobbiesLevel2"
+      },
+      {
+        "hobbyName2": "$interests.hobbies.hobbiesName2",
+        "hobbyLevel2": "$interests.hobbies.hobbiesLevel2"
+      }
+    ],
+    "personSports": [
+      {
+        "sportName1": "$interests.sports.sportsName1",
+        "sportLevel1": "$interests.sports.sportsLevel1",
+        "yearsPlayed1": "$interests.sports.years_played1"
+      },
+      {
+        "sportName2": "$interests.sports.sportsName2",
+        "sportLevel2": "$interests.sports.sportsLevel2",
+        "yearsPlayed2": "$interests.sports.years_played2"
+      }
+    ]
+  }
 }

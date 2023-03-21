@@ -1,6 +1,7 @@
 package org.jsonMapping;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeType;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import java.io.FileReader;
@@ -9,72 +10,156 @@ import java.io.IOException;
 import java.util.*;
 
 public class Main {
+    static Map sourceKeyValueMap= new LinkedHashMap();
+    static Map targetKeyValueMap = new LinkedHashMap();
+    static Map targetSourceMap = new LinkedHashMap();
+    static boolean targetFlag = false,finalKey = false;
+    private static final ObjectMapper mapper = new ObjectMapper();
+    private static JSONObject jsonObject = new JSONObject();
     public static void main(String[] args) throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
         try {
-            JsonNode sourceJsonData =  readSourceJson();
-            JsonNode targetJsonData =  readTargetJson();
-            if (sourceJsonData == null || targetJsonData == null){
+            String sourceFile = "src/main/java/org/mapperFile/SourceJson.json";
+            String targetFile = "src/main/java/org/mapperFile/TargetJson.json";
+            Map finalKeyValueMap = new LinkedHashMap();
+
+            //source call
+            readJson(sourceFile);
+            System.out.println("\n sourceKeyValueMap =\n"+sourceKeyValueMap);
+            System.out.println("\n");
+            //target Call
+            targetFlag = true;
+            readJson(targetFile);
+            System.out.println("\ntargetSourceMap = \n"+targetSourceMap);
+
+            System.out.println("\n TargetKeyValueMap =\n"+targetKeyValueMap);
+
+            if (sourceKeyValueMap.isEmpty() || targetSourceMap.isEmpty()){
                 System.out.println("file Contents are null");
             }
+//            else{
+//                Set keys = targetSourceMap.keySet();
+//                // printing the elements with keys of Target KeyValue Map
+//                for (Object key : keys) {
+//                    String targetValue = Arrays.stream(targetSourceMap.get(key).toString().split("\\$")).toList().get(1);
+//                    finalKeyValueMap.put(key,sourceKeyValueMap.get(targetValue));
+//                    jsonObject.put(key,sourceKeyValueMap.get(targetValue));
+//                }
+//                String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonObject);
+//                System.out.println("final target :"+json);
+////                file.write(json);
+////                file.close();
+//            }
+
             else{
-                System.out.println("source :"+ sourceJsonData.toPrettyString());
-                System.out.println("initial target :"+targetJsonData.toPrettyString());
-                Iterator<String> itr = targetJsonData.fieldNames();
-                Map targetKeyMap = new LinkedHashMap<>();
-                while (itr.hasNext()) {  //to get the key fields
-                    String key_field = itr.next();
-                    targetKeyMap.put(targetJsonData.get(key_field).toString(), key_field.toString());
+                Set targetKeys = targetSourceMap.keySet();
+                // printing the elements with keys of Target KeyValue Map
+                for (Object targetKey : targetKeys) {
+                    //System.out.println(key);
+                    String targetValue = Arrays.stream(targetSourceMap.get(targetKey).toString().split("\\$")).toList().get(1);
+                    finalKeyValueMap.put(targetKey,sourceKeyValueMap.get(targetValue));
+//                    jsonObject.put(key,sourceKeyValueMap.get(targetValue));
                 }
-                //Fetching values from source
-                JSONObject jsonObject = new JSONObject();
-                FileWriter file = new FileWriter("src/main/java/org/mapperFile/TargetJson.json");
-                for (JsonNode a: targetJsonData){
-                    int levelCount = Arrays.stream(a.toString().split("\\.|\"")).toList().size()-1;
-                    //Mapping Values if level of Json is 2 in Target Json
-                    if (levelCount > 2){
-                        JsonNode sourceValue = sourceJsonData.get(Arrays.stream(a.toString().split("\\.|\"")).toList().get(levelCount-1)).get(Arrays.stream(a.toString().split("\\.|\"")).toList().get(levelCount));
-                        jsonObject.put(targetKeyMap.get(a.toString()),sourceValue);
+                System.out.println("----------------------------------------------------------");
+                Set keys = targetKeyValueMap.keySet();
+                for (Object key: keys){
+                    int size = Arrays.stream(key.toString().split("\\.")).toList().size();
+                    JSONObject temp = new JSONObject();
+                    String tempKey = "";
+                    for (int i=0;i< size-1;i++){
+                        String valueAsKey= Arrays.stream(key.toString().split("\\.")).toList().get(i);
+                        String keyAsValue = Arrays.stream(key.toString().split("\\.")).toList().get(i+1);
+                        jsonObject.put(valueAsKey, valueMapper(keyAsValue));
+
                     }
-                    //Mapping Values if level of Json is 1 in Target Json
-                    else {
-                        jsonObject.put(2,sourceJsonData.get(Arrays.stream(a.toString().split("\\.|\"")).toList().get(levelCount)));
-                    }
+//                jsonObject.put(,);
                 }
-                String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonObject);
-                System.out.println("final target :"+json);
-                file.write(json);
-                file.close();
+                System.out.println(jsonObject);
             }
+
+            System.out.println("\n finalKeyValueMap : \n"+finalKeyValueMap);
+//            String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonObject);
+//            System.out.println("\n final target :"+json);
+            ////////
+
         }
         catch (Exception e){
             System.out.println("Exception occurred with File");
         }
     }
-    private static JsonNode readSourceJson() throws IOException {
+    private static JSONObject valueMapper(String key){
+        JSONObject jsonObject1 = new JSONObject();
+        if(targetSourceMap.containsKey(key)){
+            jsonObject1.put(key,targetSourceMap.get(key));
+            return jsonObject1;
+        }else{
+            jsonObject1.put(key,"");
+        }
+        return jsonObject1;
+    }
+    private static void traverse(JsonNode node, StringBuilder sb) {
+        if (node.getNodeType() == JsonNodeType.OBJECT) {
+            traverseObject(node, sb);
+        } else if(node.getNodeType() == JsonNodeType.ARRAY){
+            traverseArray(node,sb);
+        }else {
+            throw new RuntimeException("Not yet implemented");
+        }
+    }
+    private static void traverseArray(JsonNode node,StringBuilder sb){
+        if(node.fieldNames().hasNext()){
+            traverseObject(node,sb);
+        }
+        else{
+            for (JsonNode j: node){
+                traverseObject(j,sb);
+            }
+        }
+    }
+    private static boolean traversable(JsonNode node) {
+        return node.getNodeType() == JsonNodeType.OBJECT || node.getNodeType() == JsonNodeType.ARRAY;
+    }
+    private static void printNode(JsonNode node, String keyName, StringBuilder sb) {
+        if (traversable(node)) {
+            sb.append(keyName + ".");
+        } else {
+            sb.append(keyName);
+            //adding keys and values to the Source Key-Value Map
+            if(!targetFlag){
+                sourceKeyValueMap.put(sb.toString(),node.getNodeType()==JsonNodeType.NUMBER? node.longValue():node.textValue());
+            } else{
+                targetKeyValueMap.put(sb.toString(),node);
+            }
+        }
+    }
+    private static void traverseObject(JsonNode node, StringBuilder sb) {
+        node.fieldNames().forEachRemaining((String fieldName) -> {
+            //System.out.println("node : "+node+ "| fieldname : "+fieldName);
+            StringBuilder sb2 = new StringBuilder(sb);
+            JsonNode childNode = node.get(fieldName);
+            printNode(childNode, fieldName, sb2);
+            //checking if childNode is further traversable or not
+            if (traversable(childNode)) {
+                traverse(childNode, sb2);
+            }
+            //adding keys and values to the Target Key-Value Map
+            if(targetFlag &&  (childNode.getNodeType() != JsonNodeType.ARRAY && childNode.getNodeType() != JsonNodeType.OBJECT) )
+                targetSourceMap.put(fieldName,childNode.getNodeType()==JsonNodeType.NUMBER? childNode.longValue():childNode.textValue());
+        });
+    }
+    private static JsonNode readJson(String file) throws IOException {
         JSONParser jsonParser = new JSONParser();
         JsonNode sourceJsonList = null;
         try
         {
             //Read JSON file
-            FileReader reader = new FileReader("src/main/java/org/mapperFile/SourceJson.json");
+            FileReader reader = new FileReader(file);
             ObjectMapper obj = new ObjectMapper();
             sourceJsonList= obj.readTree(reader);
+            StringBuilder sb = new StringBuilder();
+            traverse(sourceJsonList, sb);
             return sourceJsonList;
         } catch (Exception e) {
-            System.out.println("Source File Not Found");
-            throw e;
-        }
-    }
-    private static JsonNode readTargetJson() throws Exception {
-        try (FileReader reader = new FileReader("src/main/java/org/mapperFile/TargetJson.json"))
-        {
-            //Read Target JSON file
-            ObjectMapper obj = new ObjectMapper();
-            JsonNode targetJsonList= obj.readTree(reader);
-            return targetJsonList;
-        } catch (IOException e) {
-            System.out.println("Target File Not Found");
+            System.out.println("File Not Found "+file);
             throw e;
         }
     }
