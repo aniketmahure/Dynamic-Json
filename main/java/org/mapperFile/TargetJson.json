@@ -1,0 +1,41 @@
+{
+  "personDetails": {
+    "personName": "$.person.name",
+    "personAge": "$.person.age",
+    "personAddress": {
+      "personStreet": "$.person.address.street",
+      "personCity": "$.person.address.city",
+      "personState": "$.person.address.state",
+      "personZip": "$.person.address.zip",
+      "personPhoneNumbers": {
+        "personHomePhone": "$.person.address.phone_numbers.home",
+        "personWorkPhone": "$.person.address.phone_numbers.work"
+      }
+    },
+    "personEmail": "$.person.email",
+    "personInterests": {
+      "personHobbies": [
+        {
+          "HobbyName1": "$.person.interests.hobbies.hobbiesName1",
+          "HobbyLevel1": "$.person.interests.hobbies.hobbiesLevel2"
+        },
+        {
+          "HobbyName2": "$.person.interests.hobbies.hobbiesName2",
+          "HobbyLevel2": "$.person.interests.hobbies.hobbiesLevel2"
+        }
+      ],
+      "personSports": [
+        {
+          "SportName1": "$.person.interests.sports.sportsName1",
+          "SportLevel1": "$.person.interests.sports.sportsLevel1",
+          "YearsPlayed1": "$.person.interests.sports.years_played1"
+        },
+        {
+          "SportName2": "$.person.interests.sports.sportsName2",
+          "SportLevel2": "$.person.interests.sports.sportsLevel2",
+          "YearsPlayed2": "$.person.interests.sports.years_played2"
+        }
+      ]
+    }
+  }
+}

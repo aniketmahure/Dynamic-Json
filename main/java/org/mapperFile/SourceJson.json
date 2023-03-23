@@ -1,0 +1,41 @@
+{
+  "person": {
+    "name": "ABC",
+    "age": 10,
+    "address": {
+      "street": "123 Main St",
+      "city": "Anytown",
+      "state": "CA",
+      "zip": "12345",
+      "phone_numbers": {
+        "home": "555-555-1234",
+        "work": "555-555-5678"
+      }
+    },
+    "email": "abc@example.com",
+    "interests": {
+      "hobbies": [
+        {
+          "hobbiesName1": "Reading",
+          "hobbiesLevel1": "Advanced"
+        },
+        {
+          "hobbiesName2": "Hiking",
+          "hobbiesLevel2": "Intermediate"
+        }
+      ],
+      "sports": [
+        {
+          "sportsName1": "Basketball",
+          "sportsLevel1": "Advanced",
+          "years_played1": 10
+        },
+        {
+          "sportsName2": "Tennis",
+          "sportsLevel2": "Beginner",
+          "years_played2": 2
+        }
+      ]
+    }
+  }
+}
