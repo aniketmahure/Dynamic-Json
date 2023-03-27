@@ -1,26 +1,41 @@
 {
-  "personInterests": {
-    "personHobbies": [
-      {
-        "hobbyName1": "$interests.hobbies.hobbiesName1",
-        "hobbyLevel1": "$interests.hobbies.hobbiesLevel2"
-      },
-      {
-        "hobbyName2": "$interests.hobbies.hobbiesName2",
-        "hobbyLevel2": "$interests.hobbies.hobbiesLevel2"
+  "personDetails": {
+    "personName": "$.person.name",
+    "personAge": "$.person.age",
+    "personAddress": {
+      "personStreet": "$.person.address.street",
+      "personCity": "$.person.address.city",
+      "personState": "$.person.address.state",
+      "personZip": "$.person.address.zip",
+      "personPhoneNumbers": {
+        "personHomePhone": "$.person.address.phone_numbers.home",
+        "personWorkPhone": "$.person.address.phone_numbers.work"
       }
-    ],
-    "personSports": [
-      {
-        "sportName1": "$interests.sports.sportsName1",
-        "sportLevel1": "$interests.sports.sportsLevel1",
-        "yearsPlayed1": "$interests.sports.years_played1"
-      },
-      {
-        "sportName2": "$interests.sports.sportsName2",
-        "sportLevel2": "$interests.sports.sportsLevel2",
-        "yearsPlayed2": "$interests.sports.years_played2"
-      }
-    ]
+    },
+    "personEmail": "$.person.email",
+    "personInterests": {
+      "personHobbies": [
+        {
+          "HobbyName1": "$.person.interests.hobbies.hobbiesName1",
+          "HobbyLevel1": "$.person.interests.hobbies.hobbiesLevel2"
+        },
+        {
+          "HobbyName2": "$.person.interests.hobbies.hobbiesName2",
+          "HobbyLevel2": "$.person.interests.hobbies.hobbiesLevel2"
+        }
+      ],
+      "personSports": [
+        {
+          "SportName1": "$.person.interests.sports.sportsName1",
+          "SportLevel1": "$.person.interests.sports.sportsLevel1",
+          "YearsPlayed1": "$.person.interests.sports.years_played1"
+        },
+        {
+          "SportName2": "$.person.interests.sports.sportsName2",
+          "SportLevel2": "$.person.interests.sports.sportsLevel2",
+          "YearsPlayed2": "$.person.interests.sports.years_played2"
+        }
+      ]
+    }
   }
 }
